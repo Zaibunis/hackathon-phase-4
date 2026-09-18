@@ -40,9 +40,20 @@ app = FastAPI(
 )
 
 # CORS for Vercel frontend
+# Extra origins (e.g. your deployed frontend URL) can be added via the
+# FRONTEND_ORIGINS env var: comma-separated, e.g.
+#   FRONTEND_ORIGINS=https://my-app.vercel.app,https://my-custom-domain.com
+_extra_origins = [
+    o.strip() for o in os.getenv("FRONTEND_ORIGINS", "").split(",") if o.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","http://127.0.0.1:8000 ", "http://localhost:8000", "https://phase-3-six.vercel.app", "http://127.0.0.1:61864"],  # Frontend URLs
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:61864",
+        "https://phase-3-six.vercel.app",
+        *_extra_origins,
+    ],  # Frontend URLs
     allow_credentials=True,
     allow_methods=["*"],  # GET, POST, OPTIONS sab allow
     allow_headers=["*"],  # Content-Type, Authorization etc.
