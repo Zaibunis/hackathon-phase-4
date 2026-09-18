@@ -4,9 +4,10 @@
  */
 
 import { createAuthClient } from "better-auth/client";
+import { getApiBaseUrl } from './api-url';
 
 // Create authentication client with dynamic base URL for production
-let authBaseURL = process.env.NEXT_PUBLIC_API_URL || "https://faria45678-chat-agent.hf.space/";
+let authBaseURL = getApiBaseUrl();
 
 // In production, adjust the URL to remove /api/v1 if it's part of the NEXT_PUBLIC_API_URL
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {

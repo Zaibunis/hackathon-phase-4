@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { Task, CreateTaskData, UpdateTaskData } from '../../../lib/types';
 import { TaskList } from '../../../components/tasks/task-list';
+import { getApiBaseUrl } from '../../../lib/api-url';
 
 const TasksPage = () => {
   const { user} = useAuth();
@@ -38,7 +39,7 @@ const TasksPage = () => {
         return;
       }
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/v1/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -78,7 +79,7 @@ const TasksPage = () => {
   const addTask = async (taskData: CreateTaskData) => {
     try {
       const token = localStorage.getItem('access_token');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/v1/tasks`, {
         method: 'POST',
         headers: {
@@ -103,7 +104,7 @@ const TasksPage = () => {
   const updateTask = async (id: string, taskData: UpdateTaskData) => {
     try {
       const token = localStorage.getItem('access_token');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
         method: 'PUT',
         headers: {
@@ -131,7 +132,7 @@ const TasksPage = () => {
   const deleteTask = async (id: string) => {
     try {
       const token = localStorage.getItem('access_token');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
@@ -152,7 +153,7 @@ const TasksPage = () => {
   const toggleTask = async (id: string, completed: boolean) => {
     try {
       const token = localStorage.getItem('access_token');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
         method: 'PATCH',
         headers: {

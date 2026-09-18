@@ -1,10 +1,11 @@
 // T003: apiClient with Authorization header
 
 import axios from 'axios';
+import { getApiBaseUrl } from './api-url';
 
 // Determine the base URL based on the environment
 // Use a fallback for when environment variable is not set
-let baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://faria45678-chat-agent.hf.space';
+let baseURL = getApiBaseUrl();
 
 // In production environments, ensure we're using the correct API URL
 if (typeof window !== 'undefined') {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChatMessage } from '../types/chatTypes';
 import { addMessageToConversation } from '../utils/apiClient';
 import { ChatUI } from './ChatUI/page'; // Your custom ChatUI component
+import { getApiBaseUrl } from '../../lib/api-url';
 
 interface ChatKitWrapperProps {
   userId: string;
@@ -38,7 +39,7 @@ const ChatKitWrapper: React.FC<ChatKitWrapperProps> = ({ userId }) => {
       const token = localStorage.getItem('access_token');
       if (!token) throw new Error('Not signed in');
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const apiUrl = getApiBaseUrl();
       const res = await fetch(`${apiUrl}/api/v1/${userId}/chat`, {
         method: 'POST',
         headers: {
