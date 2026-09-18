@@ -50,8 +50,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "http://127.0.0.1:61864",
-        "https://phase-3-six.vercel.app",
+        "https://hackathon-phase-4-afqe.vercel.app",
         *_extra_origins,
     ],  # Frontend URLs
     allow_credentials=True,
