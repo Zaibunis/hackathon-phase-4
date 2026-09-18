@@ -12,9 +12,7 @@ from src.core.config import database_url
 def get_engine():
     url = database_url()
 
-    connect_args = None
-    if url.startswith("sqlite"):
-        connect_args = {"check_same_thread": False}
+    connect_args = {"check_same_thread": False} if url.startswith("sqlite") else {}
 
     return create_engine(
         url,

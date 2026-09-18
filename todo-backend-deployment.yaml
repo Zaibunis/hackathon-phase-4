@@ -13,12 +13,21 @@ spec:
       labels:
         app: todo-backend
     spec:
+      # Backend does not need Kubernetes API access
+      automountServiceAccountToken: false
       containers:
       - name: todo-backend
         image: todo-backend:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         env:
         - name: DATABASE_URL
           valueFrom:

@@ -9,8 +9,12 @@ google-generativeai
 # SQLModel for database operations
 sqlmodel>=0.0.14
 
+# Async PostgreSQL driver (MCP server async engine)
+asyncpg>=0.29.0
+
 # Database
 psycopg2-binary>=2.9.9
+
 alembic>=1.13.0
 
 # Testing

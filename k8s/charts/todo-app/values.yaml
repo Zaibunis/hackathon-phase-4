@@ -27,9 +27,15 @@ frontend:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
   env:
     REACT_APP_API_URL: "http://todo-app-backend:8000"
-  resources: {}
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -59,13 +65,24 @@ backend:
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
+  # Reference to an existing Secret containing sensitive env vars.
+  # Create it before deploying, e.g.:
+  #   kubectl create secret generic todo-backend-secrets \
+  #     --from-literal=DATABASE_URL=... \
+  #     --from-literal=JWT_SECRET=... \
+  #     --from-literal=GEMINI_API_KEY=...
+  existingSecret: "todo-backend-secrets"
+  # Non-sensitive env vars rendered as plain env entries.
   env:
-    DATABASE_URL: "postgresql://user:password@postgres:5432/todo_db"
-    SECRET_KEY: "your-secret-key-here"
-    GEMINI_API_KEY: "your-gemini-api-key"
-    JWT_SECRET: "your-jwt-secret"
+    LOG_LEVEL: "INFO"
     DEBUG: "False"
-  resources: {}
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
   nodeSelector: {}
   tolerations: []
   affinity: {}
@@ -80,8 +97,7 @@ fullnameOverride: ""
 serviceAccount:
   # Specifies whether a service account should be created.
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
+  automount: false
   # Annotations to add to the service account.
   annotations: {}
   # The name of the service account to use.

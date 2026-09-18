@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { Task, CreateTaskData, UpdateTaskData } from '../../../lib/types';
 import { TaskList } from '../../../components/tasks/task-list';
@@ -11,19 +11,62 @@ const TasksPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load tasks for the authenticated user
+  // Reload tasks when the user changes OR when a chat-driven task change
+  // is broadcast (dispatched by the chat UI after a successful MCP operation).
   useEffect(() => {
     if (user?.id) {
       loadTasks();
     }
   }, [user]);
 
+  useEffect(() => {
+    const onTasksChanged = () => {
+      if (user?.id) loadTasks();
+    };
+    window.addEventListener('todo:tasks-changed', onTasksChanged);
+    return () => window.removeEventListener('todo:tasks-changed', onTasksChanged);
+  }, [user]);
+
   const loadTasks = async () => {
     try {
       setLoading(true);
-      // In a real implementation, this would fetch from the API
-      // For now, we'll simulate with an empty array
-      setTasks([]);
+      setError(null);
+
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        setError('Not authenticated');
+        return;
+      }
+
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${apiUrl}/v1/tasks`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.status === 401) {
+        setError('Session expired. Please sign in again.');
+        return;
+      }
+      if (!res.ok) {
+        setError(`Failed to load tasks (HTTP ${res.status})`);
+        return;
+      }
+
+      const data = await res.json();
+      // API returns either a bare array or { tasks: [...] }
+      const rawTasks: any[] = Array.isArray(data) ? data : data.tasks || [];
+
+      const mapped: Task[] = rawTasks.map((t) => ({
+        id: String(t.id),
+        title: t.title,
+        description: t.description ?? t.details ?? undefined,
+        completed: Boolean(t.is_completed ?? t.completed),
+        userId: String(t.user_id ?? user!.id),
+        createdAt: t.created_at ?? new Date().toISOString(),
+        updatedAt: t.updated_at ?? t.created_at ?? new Date().toISOString(),
+      }));
+
+      setTasks(mapped);
     } catch (err) {
       setError('Failed to load tasks');
       console.error('Error loading tasks:', err);
@@ -34,18 +77,23 @@ const TasksPage = () => {
 
   const addTask = async (taskData: CreateTaskData) => {
     try {
-      // In a real implementation, this would call the API to create a task
-      const newTask: Task = {
-        id: `task-${Date.now()}`,
-        title: taskData.title,
-        description: taskData.description,
-        completed: taskData.completed ?? false,
-        userId: user!.id,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      const token = localStorage.getItem('access_token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${apiUrl}/v1/tasks`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title: taskData.title, description: taskData.description }),
+      });
 
-      setTasks(prev => [...prev, newTask]);
+      if (!res.ok) {
+        setError(`Failed to add task (HTTP ${res.status})`);
+        return;
+      }
+
+      await loadTasks();
     } catch (err) {
       setError('Failed to add task');
       console.error('Error adding task:', err);
@@ -54,12 +102,26 @@ const TasksPage = () => {
 
   const updateTask = async (id: string, taskData: UpdateTaskData) => {
     try {
-      // In a real implementation, this would call the API to update a task
-      setTasks(prev => prev.map(task =>
-        task.id === id
-          ? { ...task, ...taskData, updatedAt: new Date().toISOString() }
-          : task
-      ));
+      const token = localStorage.getItem('access_token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title: taskData.title,
+          description: taskData.description,
+        }),
+      });
+
+      if (!res.ok) {
+        setError(`Failed to update task (HTTP ${res.status})`);
+        return;
+      }
+
+      await loadTasks();
     } catch (err) {
       setError('Failed to update task');
       console.error('Error updating task:', err);
@@ -68,7 +130,18 @@ const TasksPage = () => {
 
   const deleteTask = async (id: string) => {
     try {
-      // In a real implementation, this would call the API to delete a task
+      const token = localStorage.getItem('access_token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        setError(`Failed to delete task (HTTP ${res.status})`);
+        return;
+      }
+
       setTasks(prev => prev.filter(task => task.id !== id));
     } catch (err) {
       setError('Failed to delete task');
@@ -78,7 +151,22 @@ const TasksPage = () => {
 
   const toggleTask = async (id: string, completed: boolean) => {
     try {
-      // In a real implementation, this would call the API to toggle task completion
+      const token = localStorage.getItem('access_token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+      const res = await fetch(`${apiUrl}/v1/tasks/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ is_completed: completed }),
+      });
+
+      if (!res.ok) {
+        setError(`Failed to toggle task (HTTP ${res.status})`);
+        return;
+      }
+
       setTasks(prev => prev.map(task =>
         task.id === id
           ? { ...task, completed, updatedAt: new Date().toISOString() }
