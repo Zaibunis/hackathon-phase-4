@@ -30,6 +30,32 @@ interface AuthContextType extends AuthState {
   refreshAuth: () => void;
 }
 
+/**
+ * Extract a human-readable message from an axios/backend error.
+ * Backend `detail` can be: a string, an object {code, message}, or a
+ * Pydantic 422 array — all handled here so users never see "[object Object]".
+ */
+function extractBackendError(error: any, fallback: string): string {
+  const data = error?.response?.data;
+  const detail = data?.detail ?? data?.message ?? data?.error;
+
+  if (typeof detail === 'string' && detail) return detail;
+
+  if (Array.isArray(detail)) {
+    const first = detail[0];
+    return first?.msg || first?.message || fallback;
+  }
+
+  if (detail && typeof detail === 'object') {
+    if (detail.code === 'EMAIL_EXISTS') {
+      return 'This email is already registered. Please sign in instead.';
+    }
+    return detail.message || detail.code || fallback;
+  }
+
+  return error?.message || fallback;
+}
+
 export function useBetterAuth(): AuthContextType {
   const router = useRouter();
 
@@ -57,12 +83,7 @@ export function useBetterAuth(): AuthContextType {
       }
     } catch (error: any) {
       console.error('Sign in error:', error); // Log for debugging
-      const errorMessage = error.response?.data?.error?.message ||
-                          error.response?.data?.detail ||
-                          error.response?.data?.message ||
-                          error.message ||
-                          'Sign in failed';
-      throw new Error(errorMessage);
+      throw new Error(extractBackendError(error, 'Sign in failed. Check your email and password.'));
     }
   }, []);
 
@@ -90,12 +111,7 @@ export function useBetterAuth(): AuthContextType {
       }
     } catch (error: any) {
       console.error('Sign up error:', error); // Log for debugging
-      const errorMessage = error.response?.data?.error?.message ||
-                          error.response?.data?.detail ||
-                          error.response?.data?.message ||
-                          error.message ||
-                          'Sign up failed';
-      throw new Error(errorMessage);
+      throw new Error(extractBackendError(error, 'Sign up failed. Please try again.'));
     }
   }, []);
 

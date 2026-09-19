@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status, Response
+from sqlalchemy import func
 from sqlmodel import select
 from src.config import get_settings
 from src.services.auth_service import auth_service
@@ -39,9 +40,10 @@ async def sign_up(
     """
     settings = get_settings()
 
-    # Check if email already exists
+    # Check if email already exists (case-insensitive, whitespace-trimmed)
+    normalized_email = request.email.strip().lower()
     existing_user = session.exec(
-        select(User).where(User.email == request.email)
+        select(User).where(func.lower(User.email) == normalized_email)
     ).first()
     if existing_user:
         raise HTTPException(
@@ -53,10 +55,10 @@ async def sign_up(
             },
         )
 
-    # Hash password and create user
+    # Hash password and create user (store email normalized)
     password_hash = auth_service.get_password_hash(request.password)
 
-    user = User(email=request.email, password_hash=password_hash)
+    user = User(email=normalized_email, password_hash=password_hash)
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -102,9 +104,9 @@ async def sign_in(
     """
     settings = get_settings()
 
-    # Find user by email
+    # Find user by email (case-insensitive, whitespace-trimmed)
     user = session.exec(
-        select(User).where(User.email == request.email)
+        select(User).where(func.lower(User.email) == request.email.strip().lower())
     ).first()
 
     # Verify credentials
