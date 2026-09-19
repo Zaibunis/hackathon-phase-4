@@ -182,35 +182,51 @@ const TasksPage = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="flex items-center justify-center min-h-screen app-bg">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">
             <span className="text-white font-bold text-2xl">✓</span>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
             TaskFlow Pro
           </h1>
-          <p className="text-xl text-gray-300">Please sign in to view your tasks</p>
+          <p className="text-lg text-gray-300">Please sign in to view your tasks</p>
         </div>
       </div>
     );
   }
 
+  const totalTasks = tasks.length;
+  const completedTasks = tasks.filter(t => t.completed).length;
+  const activeTasks = totalTasks - completedTasks;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">✓</span>
-            </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              My Tasks
-            </h1>
-          </div>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Organize your workflow and boost productivity with TaskFlow Pro. Create, manage, and accomplish your goals efficiently.
+    <div className="min-h-screen app-bg">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            My Tasks
+          </h1>
+          <p className="text-gray-400 mt-1">
+            Organize your workflow and boost productivity.
           </p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
+          <div className="surface-card rounded-2xl p-4 sm:p-5">
+            <p className="text-xs sm:text-sm text-gray-400 mb-1">Total</p>
+            <p className="text-2xl sm:text-3xl font-bold text-white">{totalTasks}</p>
+          </div>
+          <div className="surface-card rounded-2xl p-4 sm:p-5">
+            <p className="text-xs sm:text-sm text-gray-400 mb-1">Active</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-400">{activeTasks}</p>
+          </div>
+          <div className="surface-card rounded-2xl p-4 sm:p-5">
+            <p className="text-xs sm:text-sm text-gray-400 mb-1">Completed</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-400">{completedTasks}</p>
+          </div>
         </div>
 
         <TaskList
