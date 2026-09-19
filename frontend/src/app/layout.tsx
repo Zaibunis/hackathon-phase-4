@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Todo App | Manage Your Tasks",
-  description: "A simple and efficient task management application",
+  title: "TaskNest — AI-Powered Task Management",
+  description: "Manage your tasks with an AI chat agent. Create, update, and complete tasks through natural conversation.",
 };
 
 export default function RootLayout({

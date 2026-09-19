@@ -19,28 +19,28 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    "font-medium rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-dark disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center";
+    "font-semibold rounded-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center whitespace-nowrap";
 
   const variantClasses = {
     primary:
-      "bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500",
+      "bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:from-indigo-600 hover:to-violet-700 focus-visible:ring-indigo-500",
     secondary:
-      "bg-background-card text-gray-200 hover:bg-background-hover border border-gray-800 focus:ring-gray-700",
+      "bg-gray-800/80 text-gray-100 hover:bg-gray-700/80 border border-gray-700/80 focus-visible:ring-gray-600",
     danger:
-      "bg-danger-500 text-white hover:bg-danger-600 focus:ring-danger-500",
+      "bg-red-600 text-white shadow-lg shadow-red-500/25 hover:bg-red-700 hover:shadow-red-500/40 focus-visible:ring-red-500",
     ghost:
-      "bg-transparent text-primary-400 hover:bg-background-card focus:ring-primary-500",
+      "bg-transparent text-gray-300 hover:bg-white/5 hover:text-white focus-visible:ring-gray-600",
     outline:
-      "border border-gray-700 text-gray-200 hover:bg-background-hover focus:ring-gray-600",
+      "border border-gray-700 bg-white/[0.03] text-gray-200 hover:bg-white/[0.08] hover:text-white hover:border-gray-600 focus-visible:ring-gray-600",
     gradient:
-      "bg-gradient-to-r from-primary-500 via-purple-500 to-cyan-500 text-white hover:opacity-90 focus:ring-primary-500",
+      "bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:brightness-110 focus-visible:ring-indigo-500",
   };
 
   const sizeClasses = {
-    sm: "px-3 py-1.5 text-sm",
-    md: "px-4 py-2 text-base",
-    lg: "px-6 py-3 text-lg",
-    xl: "px-10 py-4 text-xl",
+    sm: "px-3.5 py-2 text-sm",
+    md: "px-5 py-2.5 text-sm",
+    lg: "px-7 py-3 text-base",
+    xl: "px-9 py-4 text-lg",
   };
 
   const spinnerSize = {

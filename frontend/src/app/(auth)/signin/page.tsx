@@ -11,14 +11,14 @@ export default function SignInPage() {
 
       <div className="relative w-full max-w-md space-y-6 surface-card rounded-2xl p-8 shadow-2xl shadow-blue-500/5">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/20">
+          <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/20">
             <span className="text-white font-bold text-2xl">✓</span>
           </div>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
             Welcome Back
           </h2>
           <p className="text-gray-400">
-            Sign in to your TaskFlow Pro account
+            Sign in to your TaskNest account
           </p>
         </div>
 

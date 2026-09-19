@@ -106,13 +106,13 @@ export function SignInForm({ onSuccess, initialEmail = '' }: SignInFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {formState.errors.general && (
-        <div className="bg-danger-500/10 text-danger-400 border border-danger-500/20 p-3 rounded-xl text-sm" role="alert">
+        <div className="bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-xl text-sm" role="alert">
           {formState.errors.general}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-2">Email</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
         <Input
           type="email"
           value={formState.email}
@@ -125,12 +125,12 @@ export function SignInForm({ onSuccess, initialEmail = '' }: SignInFormProps) {
           disabled={formState.isSubmitting}
         />
         {formState.errors.email && formState.touched.email && (
-          <p className="text-danger-400 text-sm mt-1">{formState.errors.email}</p>
+          <p className="text-red-400 text-sm mt-1">{formState.errors.email}</p>
         )}
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Password</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
         <Input
           type="password"
           value={formState.password}
@@ -143,14 +143,14 @@ export function SignInForm({ onSuccess, initialEmail = '' }: SignInFormProps) {
           disabled={formState.isSubmitting}
         />
         {formState.errors.password && formState.touched.password && (
-          <p className="text-danger-400 text-sm mt-1">{formState.errors.password}</p>
+          <p className="text-red-400 text-sm mt-1">{formState.errors.password}</p>
         )}
       </div>
 
       <Button
         type="submit"
         variant="primary"
-        size="md"
+        size="lg"
         className="w-full"
         isLoading={formState.isSubmitting}
       >

@@ -15,6 +15,7 @@ interface ChatUIProps {
   onTaskOperation?: () => void; // Callback when task operations are performed
   disabled?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
 export const ChatUI: React.FC<ChatUIProps> = ({
@@ -23,6 +24,7 @@ export const ChatUI: React.FC<ChatUIProps> = ({
   onTaskOperation,
   disabled,
   placeholder,
+  className,
 }) => {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -61,21 +63,21 @@ export const ChatUI: React.FC<ChatUIProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-transparent">
+    <div className={cn('flex flex-col h-full bg-transparent', className)}>
       {/* Message List */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 overscroll-contain">
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={cn(
-              'flex items-start gap-3',
+              'flex items-start gap-2 sm:gap-3',
               msg.role === 'user' ? 'justify-end' : 'justify-start'
             )}
           >
             {/* Assistant Avatar */}
             {msg.role === 'assistant' && (
-              <Avatar className="w-9 h-9 border border-gray-600 bg-gradient-to-br from-blue-600 to-purple-600">
-                <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white text-sm font-medium">
+              <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-gray-600 bg-gradient-to-br from-blue-600 to-purple-600 shrink-0">
+                <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white text-xs sm:text-sm font-medium">
                   AI
                 </AvatarFallback>
               </Avatar>
@@ -84,7 +86,7 @@ export const ChatUI: React.FC<ChatUIProps> = ({
             {/* Message Content */}
             <div
               className={cn(
-                'p-4 rounded-2xl max-w-[85%] sm:max-w-[75%] shadow-sm',
+                'px-3.5 py-2.5 sm:p-4 rounded-2xl max-w-[85%] sm:max-w-[75%] shadow-sm text-sm sm:text-base',
                 msg.role === 'user'
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-br-none' // Enhanced gradient for user messages
                   : 'bg-gray-800/80 text-gray-100 rounded-bl-none border border-gray-700/50'
@@ -109,8 +111,8 @@ export const ChatUI: React.FC<ChatUIProps> = ({
 
             {/* User Avatar */}
             {msg.role === 'user' && (
-              <Avatar className="w-9 h-9 border border-gray-600 bg-gray-700">
-                <AvatarFallback className="bg-gray-700 text-white text-sm font-medium">U</AvatarFallback>
+              <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-gray-600 bg-gray-700 shrink-0">
+                <AvatarFallback className="bg-gray-700 text-white text-xs sm:text-sm font-medium">U</AvatarFallback>
               </Avatar>
             )}
           </div>
@@ -118,13 +120,13 @@ export const ChatUI: React.FC<ChatUIProps> = ({
 
         {/* Thinking Indicator */}
         {disabled && messages.length > 0 && (
-          <div className="flex items-start gap-3 justify-start">
-            <Avatar className="w-9 h-9 border border-gray-600 bg-gradient-to-br from-blue-600 to-purple-600">
-              <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white text-sm font-medium">
+          <div className="flex items-start gap-2 sm:gap-3 justify-start">
+            <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-gray-600 bg-gradient-to-br from-blue-600 to-purple-600 shrink-0">
+              <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white text-xs sm:text-sm font-medium">
                 AI
               </AvatarFallback>
             </Avatar>
-            <div className="p-4 rounded-2xl max-w-[85%] sm:max-w-[75%] bg-gray-800/80 rounded-bl-none border border-gray-700/50">
+            <div className="px-3.5 py-2.5 sm:p-4 rounded-2xl max-w-[85%] sm:max-w-[75%] bg-gray-800/80 rounded-bl-none border border-gray-700/50">
               <div className="flex items-center space-x-2">
                 <span className="h-2 w-2 bg-blue-400 rounded-full animate-pulse"></span>
                 <span className="h-2 w-2 bg-purple-400 rounded-full animate-pulse delay-75"></span>
@@ -138,21 +140,21 @@ export const ChatUI: React.FC<ChatUIProps> = ({
       </div>
 
       {/* Enhanced Input Area */}
-      <div className="shrink-0 p-4 bg-gray-900/50 border-t border-gray-700/50 backdrop-blur-sm">
+      <div className="shrink-0 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-4 bg-gray-900/50 border-t border-gray-700/50 backdrop-blur-sm">
         <div className="relative max-w-4xl mx-auto">
-          <div className="relative flex items-center bg-gray-800/80 border border-gray-700/50 rounded-2xl px-1 py-1 shadow-lg focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-500/50 transition-all duration-200">
+          <div className="relative flex items-center bg-gray-800/80 border border-gray-700/50 rounded-2xl px-1 py-1 shadow-lg focus-within:ring-2 focus-within:ring-indigo-500/50 focus-within:border-indigo-500/50 transition-all duration-200">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={placeholder || 'Type your message...'}
               disabled={disabled}
-              className="flex-1 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-200 h-12 px-4 rounded-xl"
+              className="flex-1 bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-200 text-base sm:text-sm h-11 sm:h-12 px-3 sm:px-4 rounded-xl"
             />
             <Button
               onClick={handleSend}
               disabled={disabled || !input.trim()}
-              className="mx-1 rounded-xl px-4"
+              className="mx-1 rounded-xl px-3 sm:px-4"
               size="md"
               variant={input.trim() ? "gradient" : "ghost"}
             >
@@ -160,7 +162,7 @@ export const ChatUI: React.FC<ChatUIProps> = ({
               <span className="ml-2 hidden sm:inline">Send</span>
             </Button>
           </div>
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          <p className="hidden sm:block text-xs text-gray-500 mt-2 text-center">
             Press Enter to send, Shift+Enter for new line
           </p>
         </div>

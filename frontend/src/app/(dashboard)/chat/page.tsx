@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import ChatKitWrapper from '../../components/ChatInterface/ChatKitWrapper';
-import LoadingStates from '../../components/ChatInterface/LoadingStates';
-import { useAuth } from '../../context/AuthContext';
-import { getConversationHistory } from '../../components/utils/apiClient';
-import { Conversation } from '../../components/types/chatTypes';
+import ChatKitWrapper from '../../../components/ChatInterface/ChatKitWrapper';
+import LoadingStates from '../../../components/ChatInterface/LoadingStates';
+import { useAuth } from '../../../context/AuthContext';
+import { getConversationHistory } from '../../../components/utils/apiClient';
+import { Conversation } from '../../../components/types/chatTypes';
 
 export default function ChatPage() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -45,16 +45,16 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-[calc(100vh-0px)] app-bg flex flex-col overflow-hidden">
+    <div className="h-full app-bg flex flex-col overflow-hidden">
       {/* Unified Chat Card */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col surface-card rounded-none sm:rounded-3xl shadow-2xl border-x-0 sm:border border-gray-700/40 m-0 sm:m-6 overflow-hidden">
-        <header className="w-full px-4 py-4 sm:px-6 flex-shrink-0 border-b border-gray-700/40 bg-gray-900/20">
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col surface-card rounded-none sm:rounded-3xl shadow-2xl border-x-0 sm:border border-gray-700/40 m-0 sm:m-4 lg:m-6 overflow-hidden">
+        <header className="w-full px-4 py-3 sm:px-6 sm:py-4 flex-shrink-0 border-b border-gray-700/40 bg-gray-900/20">
           <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate">
+              <h1 className="text-base sm:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate">
                 AI Chat Agent
               </h1>
-              <p className="text-gray-500 text-xs sm:text-sm mt-0.5 truncate">
+              <p className="hidden sm:block text-gray-500 text-sm mt-0.5 truncate">
                 Manage your tasks through natural language
               </p>
             </div>

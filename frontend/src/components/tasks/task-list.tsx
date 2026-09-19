@@ -188,7 +188,7 @@ export const TaskList: React.FC<TaskListProps> = ({
         </div>
       </div>
 
-      <div className="mb-4 flex justify-between items-center">
+      <div className="mb-4 hidden sm:flex justify-between items-center">
         <div className="text-gray-400">
           Showing <span className="text-white font-medium">{sortedTasks.length}</span> of <span className="text-white font-medium">{tasks.length}</span> tasks
         </div>

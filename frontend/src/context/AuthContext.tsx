@@ -32,7 +32,9 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
   const authHook = useBetterAuth();
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
-    loading: false,
+    // Start as loading so children (e.g. /chat redirect guard) don't fire
+    // premature redirects before the localStorage check below completes.
+    loading: true,
     error: null,
     isAuthenticated: false,
   });

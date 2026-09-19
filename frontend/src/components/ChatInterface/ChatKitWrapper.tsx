@@ -88,25 +88,21 @@ const ChatKitWrapper: React.FC<ChatKitWrapperProps> = ({ userId }) => {
   };
 
   return (
-    <div className="chat-container h-full flex flex-col">
+    <div className="chat-container flex flex-col h-full min-h-0">
       {error && (
-        <div className="error-message bg-red-900/50 border border-red-700/50 text-red-200 p-3 m-4 rounded-lg">
+        <div className="error-message shrink-0 bg-red-900/50 border border-red-700/50 text-red-200 p-3 m-3 sm:m-4 rounded-lg text-sm">
           Error: {error}
         </div>
       )}
 
-      <ChatUI
-        messages={messages}
-        onSend={handleSendMessage}
-        disabled={isLoading || !!error}
-        placeholder="Type your message..."
-      />
-
-      {isLoading && (
-        <div className="loading-indicator bg-blue-900/30 border border-blue-700/30 text-blue-200 p-2 m-2 rounded-lg text-center text-sm">
-          Assistant is thinking...
-        </div>
-      )}
+      <div className="flex-1 min-h-0">
+        <ChatUI
+          messages={messages}
+          onSend={handleSendMessage}
+          disabled={isLoading || !!error}
+          placeholder="Type your message..."
+        />
+      </div>
     </div>
   );
 };

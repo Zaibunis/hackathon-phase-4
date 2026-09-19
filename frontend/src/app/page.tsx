@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/src/styling/ui/button';
 import { FloatingChat } from '@/src/components/FloatingChat';
+import { NavbarProfile } from '@/src/components/NavbarProfile';
 
 const features = [
   {
@@ -67,27 +68,17 @@ export default function LandingPage() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <header className="py-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2.5">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <span className="text-white font-bold text-lg">✓</span>
+        <header className="py-4 sm:py-6 flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center space-x-2 sm:space-x-2.5 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
+              <span className="text-white font-bold text-base sm:text-lg">✓</span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              TaskFlow Pro
+            <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent truncate">
+              TaskNest
             </span>
           </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/signin">
-              <Button variant="outline" size="sm" className="border-gray-700 hover:bg-gray-800/60 text-gray-200">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button variant="gradient" size="sm">
-                Get Started
-              </Button>
-            </Link>
-          </div>
+          {/* Auth-aware: guest sees Sign In / Get Started, user sees profile icon */}
+          <NavbarProfile dashboardHref="/tasks" />
         </header>
 
         {/* Hero */}
@@ -108,7 +99,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-base sm:text-lg text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              TaskFlow Pro pairs a beautiful task dashboard with an AI chat agent.
+              TaskNest pairs a beautiful task dashboard with an AI chat agent.
               Create, update, and complete tasks through natural conversation — everything stays in sync.
             </p>
 
@@ -225,11 +216,13 @@ export default function LandingPage() {
             <p className="text-gray-400 mb-8">
               Join users who manage their day with a single sentence.
             </p>
-            <Link href="/signup">
-              <Button variant="gradient" size="lg" className="px-10 shadow-lg shadow-purple-500/20">
-                Get Started Today
-              </Button>
-            </Link>
+            <div className="flex justify-center">
+              <Link href="/signup">
+                <Button variant="gradient" size="lg" className="px-10 shadow-lg shadow-purple-500/20">
+                  Get Started Today
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -237,10 +230,10 @@ export default function LandingPage() {
         <footer className="py-8 border-t border-gray-800/80">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
+              <div className="w-6 h-6 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-[10px]">✓</span>
               </div>
-              <span>&copy; 2026 TaskFlow Pro</span>
+              <span>&copy; 2026 TaskNest</span>
             </div>
             <div className="flex items-center gap-6">
               <Link href="/signin" className="hover:text-gray-300 transition-colors">Sign in</Link>

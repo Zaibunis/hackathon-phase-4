@@ -137,13 +137,13 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {formState.errors.general && (
-        <div className="bg-danger-500/10 text-danger-400 border border-danger-500/20 p-3 rounded-xl text-sm" role="alert">
+        <div className="bg-red-500/10 text-red-400 border border-red-500/20 p-3 rounded-xl text-sm" role="alert">
           {formState.errors.general}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">Email</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
         <Input
           type="email"
           value={formState.email}
@@ -155,12 +155,12 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
           disabled={formState.isSubmitting}
         />
         {formState.touched.email && formState.errors.email && (
-          <p className="text-danger-500 text-sm mt-1">{formState.errors.email}</p>
+          <p className="text-red-400 text-sm mt-1">{formState.errors.email}</p>
         )}
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Password</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
         <Input
           type="password"
           value={formState.password}
@@ -172,12 +172,12 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
           disabled={formState.isSubmitting}
         />
         {formState.touched.password && formState.errors.password && (
-          <p className="text-danger-500 text-sm mt-1">{formState.errors.password}</p>
+          <p className="text-red-400 text-sm mt-1">{formState.errors.password}</p>
         )}
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Confirm Password</label>
+        <label className="block text-sm font-medium text-gray-300 mb-2">Confirm Password</label>
         <Input
           type="password"
           value={formState.confirmPassword}
@@ -189,18 +189,18 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
           disabled={formState.isSubmitting}
         />
         {formState.touched.confirmPassword && formState.errors.confirmPassword && (
-          <p className="text-danger-500 text-sm mt-1">{formState.errors.confirmPassword}</p>
+          <p className="text-red-400 text-sm mt-1">{formState.errors.confirmPassword}</p>
         )}
       </div>
 
       <Button
         type="submit"
         variant="primary"
-        size="md"
+        size="lg"
         className="w-full"
         isLoading={formState.isSubmitting}
       >
-        Sign Up
+        Create Account
       </Button>
     </form>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { ListTodo, Circle, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../../lib/hooks/useAuth';
 import { Task, CreateTaskData, UpdateTaskData } from '../../../lib/types';
 import { TaskList } from '../../../components/tasks/task-list';
@@ -184,11 +185,11 @@ const TasksPage = () => {
     return (
       <div className="flex items-center justify-center min-h-screen app-bg">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/20">
+          <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/20">
             <span className="text-white font-bold text-2xl">✓</span>
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-            TaskFlow Pro
+            TaskNest
           </h1>
           <p className="text-lg text-gray-300">Please sign in to view your tasks</p>
         </div>
@@ -199,35 +200,90 @@ const TasksPage = () => {
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(t => t.completed).length;
   const activeTasks = totalTasks - completedTasks;
+  const progressPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  const firstName = user.email?.split('@')[0] || 'there';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div className="min-h-screen app-bg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-            My Tasks
+    <div className="min-h-full">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {/* Welcome header */}
+        <div className="mb-6 sm:mb-8">
+          <p className="text-xs sm:text-sm text-gray-500 mb-1">{today}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white">
+            {greeting},{' '}
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              {firstName}
+            </span>
           </h1>
-          <p className="text-gray-400 mt-1">
-            Organize your workflow and boost productivity.
+          <p className="text-sm text-gray-400 mt-1">
+            {activeTasks > 0
+              ? `You have ${activeTasks} task${activeTasks === 1 ? '' : 's'} to work on.`
+              : totalTasks > 0
+                ? 'Everything is done — great job! 🎉'
+                : 'Create your first task to get started.'}
           </p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="surface-card rounded-2xl p-4 sm:p-5">
-            <p className="text-xs sm:text-sm text-gray-400 mb-1">Total</p>
-            <p className="text-2xl sm:text-3xl font-bold text-white">{totalTasks}</p>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-400 mb-1">Total</p>
+                <p className="text-2xl sm:text-3xl font-bold text-white">{totalTasks}</p>
+              </div>
+              <div className="hidden sm:flex w-10 h-10 rounded-xl bg-indigo-500/15 items-center justify-center shrink-0">
+                <ListTodo className="w-5 h-5 text-indigo-400" />
+              </div>
+            </div>
           </div>
           <div className="surface-card rounded-2xl p-4 sm:p-5">
-            <p className="text-xs sm:text-sm text-gray-400 mb-1">Active</p>
-            <p className="text-2xl sm:text-3xl font-bold text-blue-400">{activeTasks}</p>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-400 mb-1">Active</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-400">{activeTasks}</p>
+              </div>
+              <div className="hidden sm:flex w-10 h-10 rounded-xl bg-blue-500/15 items-center justify-center shrink-0">
+                <Circle className="w-5 h-5 text-blue-400" />
+              </div>
+            </div>
           </div>
           <div className="surface-card rounded-2xl p-4 sm:p-5">
-            <p className="text-xs sm:text-sm text-gray-400 mb-1">Completed</p>
-            <p className="text-2xl sm:text-3xl font-bold text-green-400">{completedTasks}</p>
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-400 mb-1">Done</p>
+                <p className="text-2xl sm:text-3xl font-bold text-emerald-400">{completedTasks}</p>
+              </div>
+              <div className="hidden sm:flex w-10 h-10 rounded-xl bg-emerald-500/15 items-center justify-center shrink-0">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Progress bar */}
+        {totalTasks > 0 && (
+          <div className="surface-card rounded-2xl px-4 sm:px-5 py-3.5 mb-6 sm:mb-8">
+            <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+              <span>Completion</span>
+              <span className="font-semibold text-gray-300">{progressPct}%</span>
+            </div>
+            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all duration-500"
+                style={{ width: `${progressPct}%` }}
+              />
+            </div>
+          </div>
+        )}
 
         <TaskList
           tasks={tasks}
